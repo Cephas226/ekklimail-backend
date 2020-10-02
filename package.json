@@ -17,5 +17,8 @@
     "express-fileupload": "^1.2.0",
     "mongoose": "^5.10.7",
     "xlsx": "^0.16.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

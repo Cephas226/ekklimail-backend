@@ -2,12 +2,14 @@ let express = require('express');
 let server = express();
 let cors = require('cors')
 let upload = require('express-fileupload');
-//require("./config/db");
 let importExcel = require('convert-excel-to-json');
 let del = require('del');
 var XLSX = require('xlsx')
+const Template = require('./models/templateMail');
 const bodyParser = require("body-parser");
-//const templateController = require("./controllers/template-controller");
+server.use(bodyParser.json());
+const mongoose = require("mongoose");
+
 server.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -18,9 +20,14 @@ var uploadVar;
 var xlData
 var workbook
 var sheet_name_list
+mongoose.connect('mongodb+srv://cooly:Isge2016*@cluster0-njlkx.mongodb.net/express_db?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 server.use(upload());
 
-server.get('/',(req,res)=>{
+server.get('/headers',(req,res)=>{
     var headers = []
     var range = XLSX.utils.decode_range(this.workbook.Sheets[this.sheet_name_list[0]]['!ref']);
     var C, R = range.s.r; 
@@ -32,6 +39,10 @@ server.get('/',(req,res)=>{
        headers.push(hdr);
     }
     res.send(headers)
+})
+
+server.get('/excelData',(req,res)=>{
+  res.send(this.xlData)
 })
 
 server.post('/upload',(req,res)=>{
@@ -47,14 +58,20 @@ server.post('/upload',(req,res)=>{
   this.xlData = XLSX.utils.sheet_to_json(this.workbook.Sheets[this.sheet_name_list[0]]);
   });
 });
-// server
-//   .route("/template")
-//   .get(templateController.listAllTemplate)
-//   .post(templateController.createNewTemplate);
-  
-server.use(bodyParser.urlencoded({ extended: true }));
-server.use(bodyParser.json());
-
+server.get('/api/template', (req, res, next) => {
+  Template.find()
+    .then(template => res.status(200).json(template))
+    .catch(error => res.status(400).json({ error }));
+});
+server.post('/api/template', (req, res, next) => {
+  //delete req.body._id;
+  const template = new Template({
+    ...req.body
+  });
+  template.save()
+    .then((template) => res.status(201).json(template))
+    .catch(error => res.status(400).json({ error }));
+});
 server.listen(3000,()=>{
   console.log('CORS-enabled web server listening on port 3000')
 })
