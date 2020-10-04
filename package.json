@@ -16,6 +16,8 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.2.0",
     "mongoose": "^5.10.7",
+    "nodemailer": "^6.4.13",
+    "replaceall": "^0.1.6",
     "xlsx": "^0.16.7"
   },
   "devDependencies": {
