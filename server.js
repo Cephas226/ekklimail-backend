@@ -9,7 +9,7 @@ const Template = require('./models/templateMail');
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 server.use(bodyParser.json());
-var replaceall = require("replaceall");
+var async = require("async");
 const mongoose = require("mongoose");
 
 server.use((req, res, next) => {
@@ -82,12 +82,14 @@ server.post('/sendmail', (req, res) => {
   console.log("request came");
   let user = req.body;
   sendMail(user, info => {
-    console.log(`The mail has beed send 😃 and the id is ${info.messageId}`);
     res.send(info);
   });
 });
 async function sendMail(user, callback) {
   var person=[]
+  var mailList=[]
+  var senderMail
+  var msgTab=[]
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -98,22 +100,53 @@ async function sendMail(user, callback) {
     }
   });
   user.person.map(u=>{
+    const regexp = /\${([^{]+)}/g;
+    let result = user.content.replace(regexp, function(ignore, key){
+        return eval(key);
+    });
     person=u
+     mailList.push(u.email)
+     msgTab.push({
+      email:u.email,
+      content:result
+    });
   })
-  const regexp = /\${([^{]+)}/g;
-  let result = user.content.replace(regexp, function(ignore, key){
-      return eval(key);
-  });
-  console.log(result);
-
-  let mailOptions = {
-    from: '"Fun Of Heuristic"<example.gmail.com>',
-    to: person.email,
-    subject: "Welcome to Fun Of Heuristic 👻",
-    html: result
-  };
+  let mailOptions
+  msgTab.map(m=>{
+    mailOptions = {
+      from: `<'cephaszoubga@gmail.com'>`,
+      to: m.email,
+      subject: `${user.objet}`,
+      html: m.content
+    }
+    transporter.sendMail(mailOptions)
+  })
   let info = await transporter.sendMail(mailOptions);
-  callback(info);
+  callback("succès");
+
+  // Promis.all(
+  //   msgTab.map(msgTabValue => {
+  //         let  mailOptions = {
+  //           from: `<'cephaszoubga@gmail.com'>`,
+  //           to: mailList,
+  //           subject: `${user.objet}`,
+  //           html: m.content
+  //         }
+  //     return new Promise((resolve, reject) => {
+  //       transporter.sendMail(mailOptions, function (error, info) {
+  //         if (error) {
+  //           reject(error)
+  //         } else {
+  //           console.log("Message sent1: ", info);
+  //           console.log(WEBDialerListCount)
+  //           // Update user here
+  //           transporter.close();
+  //           resolve()
+  //         }
+  //       })  
+  //     })
+  //   })
+  // )
 }
 server.listen(3000,()=>{
   console.log('CORS-enabled web server listening on port 3000')
