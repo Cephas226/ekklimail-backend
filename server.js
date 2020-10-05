@@ -87,35 +87,33 @@ server.post('/sendmail', (req, res) => {
   });
 });
 async function sendMail(user, callback) {
-  // create reusable transporter object using the default SMTP transport
+  var person=[]
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
       user: 'cephaszoubga@gmail.com',
       pass: 'Isge2016*'
     }
   });
-  var maillist=[]
-  var person=[]
   user.person.map(u=>{
     person=u
   })
-  user.content.replace("/\n|\r/g","")
+  const regexp = /\${([^{]+)}/g;
+  let result = user.content.replace(regexp, function(ignore, key){
+      return eval(key);
+  });
+  console.log(result);
 
-  console.log(user.content.replace("Hello","Couly",))
-  // let mailOptions = {
-  //   from: '"Fun Of Heuristic"<example.gimail.com>', // sender address
-  //   to: person.email, // list of receivers
-  //   subject: "Wellcome to Fun Of Heuristic 👻", // Subject line
-  //   html: user.content
-  // };
-
-  // // send mail with defined transport object
-  // let info = await transporter.sendMail(mailOptions);
-
-  // callback(info);
+  let mailOptions = {
+    from: '"Fun Of Heuristic"<example.gmail.com>',
+    to: person.email,
+    subject: "Welcome to Fun Of Heuristic 👻",
+    html: result
+  };
+  let info = await transporter.sendMail(mailOptions);
+  callback(info);
 }
 server.listen(3000,()=>{
   console.log('CORS-enabled web server listening on port 3000')
