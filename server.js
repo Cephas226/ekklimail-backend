@@ -90,6 +90,7 @@ async function sendMail(user, callback) {
   var mailList=[]
   var senderMail
   var msgTab=[]
+  var result 
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -100,17 +101,19 @@ async function sendMail(user, callback) {
     }
   });
   user.person.map(u=>{
+    console.log(u)
+    person=u
     const regexp = /\${([^{]+)}/g;
-    let result = user.content.replace(regexp, function(ignore, key){
+    result  = user.content.replace(regexp, function(ignore, key){
         return eval(key);
     });
-    person=u
      mailList.push(u.email)
      msgTab.push({
       email:u.email,
       content:result
     });
   })
+  console.log(msgTab)
   let mailOptions
   msgTab.map(m=>{
     mailOptions = {
