@@ -194,6 +194,6 @@ async function sendMail(user, callback) {
   //   })
   // )
 }
-server.listen(3000,()=>{
-  console.log('CORS-enabled web server listening on port 3000')
+server.listen(8000,()=>{
+  console.log('CORS-enabled web server listening on port 8000')
 })
