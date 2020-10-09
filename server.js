@@ -194,6 +194,7 @@ async function sendMail(user, callback) {
   //   })
   // )
 }
-server.listen(8000,()=>{
-  console.log('CORS-enabled web server listening on port 8000')
-})
+var port = process.env.PORT || 8000;
+server.listen(port, () => {
+  console.log("App is running on port " + port);
+});
