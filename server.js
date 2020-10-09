@@ -5,9 +5,13 @@ let upload = require('express-fileupload');
 let importExcel = require('convert-excel-to-json');
 let del = require('del');
 var XLSX = require('xlsx')
+var bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
 const Template = require('./models/templateMail');
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
+const auth = require('./middleware/auth');
+const User = require('./models/user.model')
 server.use(bodyParser.json());
 var async = require("async");
 const mongoose = require("mongoose");
@@ -30,6 +34,46 @@ mongoose.connect('mongodb+srv://cooly:Isge2016*@cluster0-njlkx.mongodb.net/expre
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 server.use(upload());
 
+
+
+server.post('/signup',(req,res)=>{
+    bcrypt.hash(req.body.password, 10)
+    .then(hash => {
+      const user = new User({
+        email: req.body.email,
+        password: hash
+      });
+      user.save()
+        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+        .catch(error => res.status(400).json({ error }));
+    })
+    .catch(error => res.status(500).json({ error }));
+})
+server.post('/login',(req,res)=>{
+  User.findOne({ email: req.body.email })
+  .then(user => {
+    if (!user) {
+      return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+    }
+    bcrypt.compare(req.body.password, user.password)
+      .then(valid => {
+        if (!valid) {
+          return res.status(401).json({ error: 'Mot de passe incorrect !' });
+        }
+        res.status(200).json({
+          userId: user._id,
+          token: jwt.sign(
+            { userId: user._id },
+            'RANDOM_TOKEN_SECRET',
+            { expiresIn: '24h' }
+          )
+        });
+      })
+      //.catch(error => res.status(500).json({ error }));
+  })
+ // .catch(error => res.status(500).json({ error }));
+})
+
 server.get('/headers',(req,res)=>{
     var headers = []
     var range = XLSX.utils.decode_range(this.workbook.Sheets[this.sheet_name_list[0]]['!ref']);
@@ -47,7 +91,6 @@ server.get('/headers',(req,res)=>{
 server.get('/excelData',(req,res)=>{
   res.send(this.xlData)
 })
-
 server.post('/upload',(req,res)=>{
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
