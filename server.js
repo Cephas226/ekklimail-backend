@@ -140,7 +140,7 @@ async function sendMail(user, callback) {
     secure: false,
     auth: {
       user: 'cephaszoubga@gmail.com',
-      pass: 'Isge2016*'
+      pass: '#ToiET%Hv@ToiS+$.'
     }
   });
   user.person.map(u=>{
