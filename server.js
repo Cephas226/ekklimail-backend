@@ -194,7 +194,7 @@ async function sendMail(user, callback) {
   //   })
   // )
 }
-var port = process.env.PORT || 8000;
+const port = process.env.PORT || '8080';
 server.listen(port, () => {
   console.log("App is running on port " + port);
 });
