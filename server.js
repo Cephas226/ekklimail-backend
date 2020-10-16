@@ -131,7 +131,7 @@ server.post('/api/template', (req, res, next) => {
     this.post_data=template
 });
 server.post('/',cors(),(req, res) => {
-  res.json({msg: 'This is CORS-enabled for a Single Route'})
+//  res.json({msg: 'This is CORS-enabled for a Single Route'})
   // console.log("request came");
   // let user = req.body;
   // sendMail(user, info => {
