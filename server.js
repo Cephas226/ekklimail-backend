@@ -21,11 +21,11 @@ server.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
-var corsOptions = {
-  origin: "*"
-};
+// var corsOptions = {
+//   origin: "*"
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 var uploadVar;
 var xlData
@@ -130,7 +130,7 @@ server.post('/api/template', (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
     this.post_data=template
 });
-server.post('/',cors(corsOptions),(req, res) => {
+server.post('/',(req, res) => {
   console.log("request came");
   let user = req.body;
   sendMail(user, info => {
