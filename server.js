@@ -125,7 +125,7 @@ server.post('/api/template', (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
     this.post_data=template
 });
-server.post('/sendmail', (req, res) => {
+server.post('/sendmail', cors(),(req, res) => {
   console.log("request came");
   let user = req.body;
   sendMail(user, info => {
