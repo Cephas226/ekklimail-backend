@@ -133,9 +133,19 @@ server.post('/api/template', (req, res, next) => {
 server.post('/',(req, res) => {
   console.log("request came");
   let user = req.body;
-  sendMail(user, info => {
-    res.send(info);
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: user.currentUserEmail,
+      pass:user.password
+    }
   });
+  console.log(transporter)
+  // sendMail(user, info => {
+  //   res.send(info);
+  // });
 });
 server.get('/api/user/:id', (req, res, next) => {
   User.findOne({ _id: req.params.id })
