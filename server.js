@@ -137,6 +137,47 @@ server.post('/',cors(),(req, res) => {
   // sendMail(user, info => {
   //   res.send(info);
   // });
+  let user = req.body;
+  var person=[]
+  var mailList=[]
+  var senderMail
+  var msgTab=[]
+  var result
+  this.userInfo=[]
+  console.log(user)
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: user.currentUserEmail,
+      pass:user.password
+    }
+  });
+  user.person.map(u=>{
+
+    person=u
+    const regexp = /\${([^{]+)}/g;
+    result  = user.content.replace(regexp, function(ignore, key){
+        return eval(key);
+    });
+     mailList.push(u.email)
+     msgTab.push({
+      email:u.email,
+      content:result
+    });
+  })
+  console.log(msgTab)
+  let mailOptions
+  msgTab.map(m=>{
+    mailOptions = {
+      from: `<'cephaszoubga@gmail.com'>`,
+      to: m.email,
+      subject: `${user.objet}`,
+      html: m.content
+    }
+    transporter.sendMail(mailOptions)
+  })
 });
 server.get('/api/user/:id', (req, res, next) => {
   User.findOne({ _id: req.params.id })
