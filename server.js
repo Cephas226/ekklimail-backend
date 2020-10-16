@@ -16,12 +16,11 @@ server.use(bodyParser.json());
 var async = require("async");
 const mongoose = require("mongoose");
 
-server.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  next();
-});
+var corsOptions = {
+  origin: "*"
+};
+
+server.use(cors(corsOptions));
 var uploadVar;
 var xlData
 var workbook
@@ -142,7 +141,7 @@ async function sendMail(user, callback) {
   var mailList=[]
   var senderMail
   var msgTab=[]
-  var result 
+  var result
   this.userInfo=[]
   console.log(user)
   let transporter = nodemailer.createTransport({
@@ -155,7 +154,7 @@ async function sendMail(user, callback) {
     }
   });
   user.person.map(u=>{
-  
+
     person=u
     const regexp = /\${([^{]+)}/g;
     result  = user.content.replace(regexp, function(ignore, key){
@@ -200,7 +199,7 @@ async function sendMail(user, callback) {
   //           transporter.close();
   //           resolve()
   //         }
-  //       })  
+  //       })
   //     })
   //   })
   // )
