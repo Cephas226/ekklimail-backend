@@ -23,6 +23,11 @@ server.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", 'Origin,X-Requested-With,Content-Type,Accept,content-type,application/json');
   next();
 });
+var corsOptions = {
+  origin: 'https://ekklimail.web.app',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 var uploadVar;
 var xlData
 var workbook
@@ -126,7 +131,7 @@ server.post('/api/template', (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
     this.post_data=template
 });
-server.post('/sendmail', (req, res) => {
+server.post('/sendmail',cors(corsOptions),(req, res) => {
   console.log("request came");
   let user = req.body;
   sendMail(user, info => {
