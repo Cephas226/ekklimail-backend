@@ -133,6 +133,16 @@ server.post('/api/template', (req, res, next) => {
 server.post('/',(req, res) => {
   console.log("request came");
   let user = req.body;
+  // sendMail(user, info => {
+  //   res.send(info);
+  // });
+  var person=[]
+  var mailList=[]
+  var senderMail
+  var msgTab=[]
+  var result
+  this.userInfo=[]
+  console.log(user)
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -142,11 +152,33 @@ server.post('/',(req, res) => {
       pass:user.password
     }
   });
-  res.json(transporter)
-//  res.send( transporter)
-  // sendMail(user, info => {
-  //   res.send(info);
-  // });
+  user.person.map(u=>{
+
+    person=u
+    const regexp = /\${([^{]+)}/g;
+    result  = user.content.replace(regexp, function(ignore, key){
+        return eval(key);
+    });
+     mailList.push(u.email)
+     msgTab.push({
+      email:u.email,
+      content:result
+    });
+  })
+  console.log(msgTab)
+  let mailOptions
+  msgTab.map(m=>{
+    mailOptions = {
+      from: `<'cephaszoubga@gmail.com'>`,
+      to: m.email,
+      subject: `${user.objet}`,
+      html: m.content
+    }
+    transporter.sendMail(mailOptions)
+  })
+  let info = await transporter.sendMail(mailOptions);
+  callback("succès");
+  res.send(info);
 });
 server.get('/api/user/:id', (req, res, next) => {
   User.findOne({ _id: req.params.id })
