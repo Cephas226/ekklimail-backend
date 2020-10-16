@@ -130,55 +130,12 @@ server.post('/api/template', (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
     this.post_data=template
 });
-server.post('/',cors(),(req, res) => {
-//  res.json({msg: 'This is CORS-enabled for a Single Route'})
-  // console.log("request came");
-  // let user = req.body;
-  // sendMail(user, info => {
-  //   res.send(info);
-  // });
+server.post('/',(req, res) => {
+  console.log("request came");
   let user = req.body;
-  var person=[]
-  var mailList=[]
-  var senderMail
-  var msgTab=[]
-  var result
-  this.userInfo=[]
-  console.log(user)
-  let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: user.currentUserEmail,
-      pass:user.password
-    }
+  sendMail(user, info => {
+    res.send(info);
   });
-  user.person.map(u=>{
-
-    person=u
-    const regexp = /\${([^{]+)}/g;
-    result  = user.content.replace(regexp, function(ignore, key){
-        return eval(key);
-    });
-     mailList.push(u.email)
-     msgTab.push({
-      email:u.email,
-      content:result
-    });
-  })
-  console.log(msgTab)
-  let mailOptions
-  msgTab.map(m=>{
-    mailOptions = {
-      from: `<'cephaszoubga@gmail.com'>`,
-      to: m.email,
-      subject: `${user.objet}`,
-      html: m.content
-    }
-    transporter.sendMail(mailOptions)
-  })
-  res.send( transporter.sendMail(mailOptions));
 });
 server.get('/api/user/:id', (req, res, next) => {
   User.findOne({ _id: req.params.id })
