@@ -27,6 +27,7 @@ var xlData
 var workbook
 var sheet_name_list
 var post_data;
+let connectedUser;
 mongoose.connect('mongodb+srv://cooly:Isge2016*@cluster0-njlkx.mongodb.net/express_db?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -40,6 +41,7 @@ server.post('/signup',(req,res)=>{
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const user = new User({
+        name:req.body.name,
         email: req.body.email,
         password: hash
       });
@@ -60,8 +62,10 @@ server.post('/login',(req,res)=>{
         if (!valid) {
           return res.status(401).json({ error: 'Mot de passe incorrect !' });
         }
+       this.connectedUser= user.name
         res.status(200).json({
           userId: user._id,
+          name:user.name,
           token: jwt.sign(
             { userId: user._id },
             'RANDOM_TOKEN_SECRET',
@@ -128,23 +132,30 @@ server.post('/sendmail', (req, res) => {
     res.send(info);
   });
 });
+server.get('/api/user/:id', (req, res, next) => {
+  User.findOne({ _id: req.params.id })
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(404).json({ error }));
+});
 async function sendMail(user, callback) {
   var person=[]
   var mailList=[]
   var senderMail
   var msgTab=[]
   var result 
+  this.userInfo=[]
+  console.log(user)
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
     secure: false,
     auth: {
-      user: 'cephaszoubga@gmail.com',
-      pass: '#ToiET%Hv@ToiS+$.'
+      user: user.currentUserEmail,
+      pass:user.password
     }
   });
   user.person.map(u=>{
-    console.log(u)
+  
     person=u
     const regexp = /\${([^{]+)}/g;
     result  = user.content.replace(regexp, function(ignore, key){
