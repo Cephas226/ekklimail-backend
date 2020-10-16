@@ -23,7 +23,7 @@ server.use((req, res, next) => {
   next();
 });
 var corsOptions = {
-  origin: '*',
+  origin: 'https://ekklimail.web.app',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 var uploadVar;
