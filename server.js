@@ -142,7 +142,7 @@ server.post('/',(req, res) => {
       pass:user.password
     }
   });
-  res.json({msg:transporter})
+  res.json(transporter)
 //  res.send( transporter)
   // sendMail(user, info => {
   //   res.send(info);
