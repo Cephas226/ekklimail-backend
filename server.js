@@ -130,12 +130,13 @@ server.post('/api/template', (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
     this.post_data=template
 });
-server.post('/',(req, res) => {
-  console.log("request came");
-  let user = req.body;
-  sendMail(user, info => {
-    res.send(info);
-  });
+server.post('/',cors(),(req, res) => {
+  res.json({msg: 'This is CORS-enabled for a Single Route'})
+  // console.log("request came");
+  // let user = req.body;
+  // sendMail(user, info => {
+  //   res.send(info);
+  // });
 });
 server.get('/api/user/:id', (req, res, next) => {
   User.findOne({ _id: req.params.id })
