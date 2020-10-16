@@ -178,6 +178,7 @@ server.post('/',cors(),(req, res) => {
     }
     transporter.sendMail(mailOptions)
   })
+  res.send( transporter.sendMail(mailOptions));
 });
 server.get('/api/user/:id', (req, res, next) => {
   User.findOne({ _id: req.params.id })
