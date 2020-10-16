@@ -17,11 +17,15 @@ var async = require("async");
 const mongoose = require("mongoose");
 
 server.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://ekklimail.web.app');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+var corsOptions = {
+  origin: 'https://ekklimail.web.app',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 var uploadVar;
 var xlData
 var workbook
@@ -125,7 +129,7 @@ server.post('/api/template', (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
     this.post_data=template
 });
-server.post('/sendmail', (req, res) => {
+server.post('/sendmail', corsOptions,(req, res) => {
   console.log("request came");
   let user = req.body;
   sendMail(user, info => {
