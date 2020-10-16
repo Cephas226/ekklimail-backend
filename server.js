@@ -22,6 +22,11 @@ server.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+var corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 var uploadVar;
 var xlData
 var workbook
@@ -125,7 +130,7 @@ server.post('/api/template', (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
     this.post_data=template
 });
-server.post('/sendmail', cors(),(req, res) => {
+server.post('/',cors(corsOptions),(req, res) => {
   console.log("request came");
   let user = req.body;
   sendMail(user, info => {
