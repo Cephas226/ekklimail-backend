@@ -16,11 +16,16 @@ server.use(bodyParser.json());
 var async = require("async");
 const mongoose = require("mongoose");
 
-var corsOptions = {
-  origin: "*"
-};
+server.use(function (req, res, next) {
 
-server.use(cors(corsOptions));
+  res.setHeader('Access-Control-Allow-Origin', 'https://enigmatic-reef-10449.herokuapp.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  next();
+});
+
 var uploadVar;
 var xlData
 var workbook
