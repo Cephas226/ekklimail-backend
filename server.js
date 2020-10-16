@@ -1,6 +1,5 @@
 let express = require('express');
 let server = express();
-let cors = require('cors')
 let upload = require('express-fileupload');
 let importExcel = require('convert-excel-to-json');
 let del = require('del');
@@ -15,7 +14,7 @@ const User = require('./models/user.model')
 server.use(bodyParser.json());
 var async = require("async");
 const mongoose = require("mongoose");
-
+let cors = require('cors')
 server.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -23,9 +22,10 @@ server.use((req, res, next) => {
   next();
 });
 var corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+  origin: "*"
+};
+
+app.use(cors(corsOptions));
 
 var uploadVar;
 var xlData
