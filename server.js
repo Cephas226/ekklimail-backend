@@ -1,7 +1,6 @@
 let express = require('express');
 let server = express();
 let upload = require('express-fileupload');
-let cors = require('cors')
 let importExcel = require('convert-excel-to-json');
 let del = require('del');
 var XLSX = require('xlsx')
@@ -26,6 +25,7 @@ const mongoose = require("mongoose");
 // };
 
 // app.use(cors(corsOptions));
+let cors = require('cors')
 server.use(cors())
 var uploadVar;
 var xlData
