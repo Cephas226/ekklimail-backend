@@ -16,7 +16,7 @@ server.use(bodyParser.json());
 var async = require("async");
 const mongoose = require("mongoose");
 server.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', 'https://enigmatic-reef-10449.herokuapp.com');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
@@ -136,49 +136,6 @@ server.post('/',(req, res) => {
   sendMail(user, info => {
     res.send(info);
   });
-  // var person=[]
-  // var mailList=[]
-  // var senderMail
-  // var msgTab=[]
-  // var result
-  // this.userInfo=[]
-  // console.log(user)
-  // let transporter = nodemailer.createTransport({
-  //   host: "smtp.gmail.com",
-  //   port: 587,
-  //   secure: false,
-  //   auth: {
-  //     user: user.currentUserEmail,
-  //     pass:user.password
-  //   }
-  // });
-  // user.person.map(u=>{
-
-  //   person=u
-  //   const regexp = /\${([^{]+)}/g;
-  //   result  = user.content.replace(regexp, function(ignore, key){
-  //       return eval(key);
-  //   });
-  //    mailList.push(u.email)
-  //    msgTab.push({
-  //     email:u.email,
-  //     content:result
-  //   });
-  // })
-  // console.log(msgTab)
-  // let mailOptions
-  // msgTab.map(m=>{
-  //   mailOptions = {
-  //     from: `<'cephaszoubga@gmail.com'>`,
-  //     to: m.email,
-  //     subject: `${user.objet}`,
-  //     html: m.content
-  //   }
-  //   transporter.sendMail(mailOptions)
-  // })
-  // let info = await transporter.sendMail(mailOptions);
-  // callback("succès");
-  // res.send(info);
 });
 server.get('/api/user/:id', (req, res, next) => {
   User.findOne({ _id: req.params.id })
