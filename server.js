@@ -1,6 +1,7 @@
 let express = require('express');
 let server = express();
 let upload = require('express-fileupload');
+let cors = require('cors')
 let importExcel = require('convert-excel-to-json');
 let del = require('del');
 var XLSX = require('xlsx')
@@ -14,7 +15,6 @@ const User = require('./models/user.model')
 server.use(bodyParser.json());
 var async = require("async");
 const mongoose = require("mongoose");
-let cors = require('cors')
 server.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
