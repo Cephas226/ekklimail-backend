@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
-},
+  },
   "author": "",
-  "license": "ISC", 
+  "license": "ISC",
   "dependencies": {
     "async": "^3.2.0",
     "bcrypt": "^5.0.0",
