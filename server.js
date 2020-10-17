@@ -21,12 +21,12 @@ const mongoose = require("mongoose");
 //   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 //   next();
 // });
-var corsOptions = {
-  origin: "*"
-};
+// var corsOptions = {
+//   origin: "*"
+// };
 
-app.use(cors(corsOptions));
-
+// app.use(cors(corsOptions));
+app.use(cors())
 var uploadVar;
 var xlData
 var workbook
