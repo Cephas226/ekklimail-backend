@@ -15,17 +15,17 @@ const User = require('./models/user.model')
 server.use(bodyParser.json());
 var async = require("async");
 const mongoose = require("mongoose");
-server.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://enigmatic-reef-10449.herokuapp.com');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-  next();
-});
-// var corsOptions = {
-//   origin: "*"
-// };
+// server.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', 'https://enigmatic-reef-10449.herokuapp.com');
+//   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+//   next();
+// });
+var corsOptions = {
+  origin: "*"
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 var uploadVar;
 var xlData
