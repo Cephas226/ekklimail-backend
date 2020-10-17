@@ -26,7 +26,7 @@ const mongoose = require("mongoose");
 // };
 
 // app.use(cors(corsOptions));
-app.use(cors())
+server.use(cors())
 var uploadVar;
 var xlData
 var workbook
